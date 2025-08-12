@@ -2,7 +2,7 @@
 // @name         ChatGPT GPT 4o + Temp Chat Automation
 // @namespace    http://tampermonkey.net/
 // @version      1.6
-// @description  Always enforces GPT-4o and Temporary Chat on start; skips if viewing a conversation (/c/...); Ctrl+Space to toggle Temp Chat
+// @description  Always enforces GPT-4o and Temporary Chat on start
 // @author       MHSEA
 // @icon         https://cdn.oaistatic.com/assets/favicon-180x180-od45eci6.webp
 // @match        https://chatgpt.com/*
