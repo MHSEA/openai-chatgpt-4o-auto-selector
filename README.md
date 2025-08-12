@@ -3,7 +3,7 @@
 A fast and lightweight Tampermonkey userscript that:
 
 ✅ Automatically enables **Temporary Chat** mode  
-✅ Forces model to **GPT-4o**  
+✅ Automatically selects **GPT-4o**  
 ✅ Adds a **Ctrl + Space** keyboard shortcut to toggle Temporary Chat  
 ✅ Skips execution entirely if URL already has `?model=gpt-4o&temporary-chat=true`  
 ✅ Optimized for speed and reliability — even on route changes
@@ -18,6 +18,15 @@ A fast and lightweight Tampermonkey userscript that:
 - 🧪 Smart checks to **avoid redundant actions**
 - 🔁 Detects route changes and reapplies settings if needed
 - 🛑 **Does not run** if URL already includes the correct query params
+
+---
+
+📝 Important Notes
+If you're not seeing GPT-4o in the model selector:
+  1- Go to chatgpt.com on a PC or browser
+  2- Open Settings → General
+  3- Enable "Show legacy models"
+❌ This script does not work in the ChatGPT mobile app
 
 ---
 
