@@ -59,7 +59,7 @@ The script **won't run**, avoiding unnecessary operations.
 
 ## 📜 License
 
-[MIT License]([LICENSE](https://mit-license.org/)
+[MIT License] [LICENSE](https://mit-license.org/)
 
 ---
 
