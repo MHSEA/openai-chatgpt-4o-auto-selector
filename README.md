@@ -61,14 +61,15 @@ If you're not seeing GPT-4o in the model selector:
 ---
 
 ## 🔒 Note on Direct URL Parameters
-If you try accessing ChatGPT using a URL like: https://chatgpt.com/?model=gpt-4o&temporary-chat=true
+OpenAI no longer allows selecting models or toggling Temporary Chat via URL parameters alone. For example, visiting: https://chatgpt.com/?model=gpt-4o won’t apply the desired settings automatically.
 
-OpenAI no longer allows selecting models through URL parameters alone. That’s why this script simulates real user interaction to:
+This script solves that by simulating real user interaction to:
 
-- ✅ GPT-4o is automatically selected via the UI
-- ✅ Temporary Chat is toggled through interface interaction
+- ✅ Enable Temporary Chat
+- ✅ Select GPT-4o via the dropdown
 
-Additionally, if this exact URL is detected, the script will not run to avoid redundant actions and unnecessary processing.
+🛑 If the URL contains model=gpt-5, the script respects your choice and will not force GPT-4o.
+Additionally, if model=gpt-4o&temporary-chat=true is already set, the script won’t run at all to avoid unnecessary processing.
 
 ---
 
