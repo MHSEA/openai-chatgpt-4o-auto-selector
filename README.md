@@ -25,7 +25,7 @@ A fast and lightweight Tampermonkey userscript that:
 
 1. Install [Tampermonkey](https://www.tampermonkey.net/) for your browser.
 2. Click “Create a new script” in the Tampermonkey dashboard.
-3. Paste in the contents of [[chatgpt-gpt4o-automation.js](https://github.com/MHSEA/openai-chatgpt-4o-auto-selector/blob/main/chatgpt-gpt4o-automation.js).
+3. Paste in the contents of [chatgpt-gpt4o-automation.js](https://github.com/MHSEA/openai-chatgpt-4o-auto-selector/blob/main/chatgpt-gpt4o-automation.js).
 4. Save the script and reload [https://chatgpt.com](https://chatgpt.com).
 
 ---
@@ -59,7 +59,7 @@ The script **won't run**, avoiding unnecessary operations.
 
 ## 📜 License
 
-[MIT License](LICENSE)
+[MIT License]([LICENSE](https://mit-license.org/)
 
 ---
 
