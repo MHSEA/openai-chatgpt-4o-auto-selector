@@ -1,4 +1,4 @@
-# 🔄 ChatGPT Temp Chat First, Then GPT-4o + Ctrl+Space Toggle
+# 🔄 ChatGPT GPT 4o + Temp Chat Automation
 
 A fast and lightweight Tampermonkey userscript that:
 
