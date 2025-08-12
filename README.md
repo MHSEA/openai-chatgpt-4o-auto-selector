@@ -1,2 +1,74 @@
-# openai-chatgpt-4o-auto-selector
-Automatically enables GPT-4o and Temporary Chat on ChatGPT load. Includes Ctrl + Space toggle. Fast, reliable, and skips execution when correct URL parameters are already set.
+# 🔄 ChatGPT Temp Chat First, Then GPT-4o + Ctrl+Space Toggle
+
+A fast and lightweight Tampermonkey userscript that:
+
+✅ Automatically enables **Temporary Chat** mode  
+✅ Forces model to **GPT-4o**  
+✅ Adds a **Ctrl + Space** keyboard shortcut to toggle Temporary Chat  
+✅ Skips execution entirely if URL already has `?model=gpt-4o&temporary-chat=true`  
+✅ Optimized for speed and reliability — even on route changes
+
+---
+
+## 🚀 Features
+
+- 🧠 **Auto-enables Temporary Chat** on every page load
+- ⚡ **Forces GPT-4o model selection** after temp chat
+- 🎛️ **Ctrl + Space toggle** to manually switch temp chat on/off
+- 🧪 Smart checks to **avoid redundant actions**
+- 🔁 Detects route changes and reapplies settings if needed
+- 🛑 **Does not run** if URL already includes the correct query params
+
+---
+
+## 💻 Installation
+
+1. Install [Tampermonkey](https://www.tampermonkey.net/) for your browser.
+2. Click “Create a new script” in the Tampermonkey dashboard.
+3. Paste in the contents of `chatgpt-tempchat-gpt4o.user.js`.
+4. Save the script and reload [https://chatgpt.com](https://chatgpt.com).
+
+---
+
+## ⌨️ Shortcut
+
+| Key Combo     | Action                         |
+|---------------|--------------------------------|
+| `Ctrl + Space`| Toggle Temporary Chat manually |
+
+---
+
+## 🧩 How it works
+
+- Uses fast polling (`15ms`) for near-instant detection
+- Mimics real mouse and keyboard events for compatibility
+- Uses mutation-safe selectors and retry strategies
+- Runs in strict order: **Temp Chat → GPT-4o**
+
+---
+
+## 🛑 Skip Conditions
+
+If you're already using a URL like:
+
+https://chatgpt.com/?model=gpt-4o&temporary-chat=true
+
+The script **won't run**, avoiding unnecessary operations.
+
+---
+
+## 📜 License
+
+[MIT License](LICENSE)
+
+---
+
+## 👨‍💻 Author
+
+Maintained by [MHSEA](https://github.com/MHSEA)
+
+---
+
+## 🧠 Tip
+
+Pin this script to the top of your Tampermonkey list to ensure it runs before others!
