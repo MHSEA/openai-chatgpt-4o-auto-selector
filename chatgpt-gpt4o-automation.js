@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         ChatGPT GPT 4o + Temp Chat Automation
 // @namespace    http://tampermonkey.net/
-// @version      1.4
-// @description  Temp Chat first, GPT-4o second, Ctrl+Space toggle — skips if model=gpt-5 is in URL, or model=gpt-4o & temporary-chat=true already set, or on /c/<uuid> paths
+// @version      1.6
+// @description  Always enforces GPT-4o and Temporary Chat on start; skips if viewing a conversation (/c/...); Ctrl+Space to toggle Temp Chat
 // @author       MHSEA
 // @icon         https://cdn.oaistatic.com/assets/favicon-180x180-od45eci6.webp
 // @match        https://chatgpt.com/*
@@ -13,24 +13,10 @@
 (function () {
   'use strict';
 
-  const pathIsConversation = /^\/c\/[a-f0-9-]{36}$/i.test(location.pathname);
-  if (pathIsConversation) {
-    console.log('[TM] Skipping script — conversation URL detected:', location.pathname);
+  const isConversationURL = /^\/c\/[a-f0-9-]{36}$/i.test(location.pathname);
+  if (isConversationURL) {
+    console.log('[TM] Skipping automation — detected conversation URL.');
     return;
-  }
-
-  const urlParams = new URLSearchParams(window.location.search);
-  const modelParam = urlParams.get('model')?.toLowerCase() || '';
-  const tempChatParam = urlParams.get('temporary-chat');
-
-  if (modelParam === 'gpt-4o' && tempChatParam === 'true') {
-    console.log('[TM] Skipping script — already using GPT-4o + Temporary Chat ✅');
-    return;
-  }
-
-  const skipModelSwitch = modelParam === 'gpt-5';
-  if (skipModelSwitch) {
-    console.log('[TM] Skipping GPT-4o switch — GPT-5 explicitly requested via URL.');
   }
 
   const q = (s, r = document) => r.querySelector(s);
@@ -106,13 +92,14 @@
     return true;
   }
 
-  async function enforceGPT4o() {
-    if (skipModelSwitch) return;
-
-    for (let i = 0; i < 2; i++) {
-      if (await selectGPT4o()) break;
-      await sleep(50);
-    }
+  async function enforceAutomation() {
+    await Promise.all([
+      waitFor(getTempChatButton),
+      waitFor('button[data-testid="model-switcher-dropdown-button"]')
+    ]);
+    await forceTempChatOn();
+    await selectGPT4o();
+    setTimeout(forceTempChatOn, 500);
   }
 
   // Ctrl+Space toggles Temp Chat
@@ -124,28 +111,30 @@
     }
   });
 
-  // Initial load: Temp Chat + Model Selection
-  (async () => {
-    await Promise.all([
-      waitFor(getTempChatButton),
-      waitFor('button[data-testid="model-switcher-dropdown-button"]')
-    ]);
-    await forceTempChatOn();   // TEMP CHAT ONLY ONCE
-    await enforceGPT4o();
-    setTimeout(forceTempChatOn, 500);
-  })();
+  // Run on initial load
+  enforceAutomation();
 
-  // On route change: GPT-4o only (not for conversation URLs)
+  // Watch for route changes
   let lastPath = location.pathname;
   setInterval(() => {
-    const newPath = location.pathname;
-    if (newPath !== lastPath) {
-      lastPath = newPath;
-      if (!/^\/c\/[a-f0-9-]{36}$/i.test(newPath)) {
-        enforceGPT4o();
-      } else {
-        console.log('[TM] Route change to conversation — skipping automation');
+    if (location.pathname !== lastPath) {
+      lastPath = location.pathname;
+      if (!/^\/c\/[a-f0-9-]{36}$/i.test(location.pathname)) {
+        enforceAutomation();
       }
     }
   }, 1000);
+
+  // Re-trigger on "New Chat" click
+  const observer = new MutationObserver(() => {
+    const newChatBtn = q('[data-testid="create-new-chat-button"]');
+    if (newChatBtn && !newChatBtn.dataset.tmListener) {
+      newChatBtn.dataset.tmListener = 'true';
+      newChatBtn.addEventListener('click', () => {
+        console.log('[TM] New Chat clicked — enforcing automation');
+        setTimeout(() => enforceAutomation(), 500);
+      });
+    }
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
 })();
