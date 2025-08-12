@@ -74,7 +74,7 @@ Additionally, if this exact URL is detected, the script will not run to avoid re
 
 ## 📜 License
 
-[MIT License] [LICENSE](https://mit-license.org/)
+[MIT License](https://mit-license.org/)
 
 ---
 
