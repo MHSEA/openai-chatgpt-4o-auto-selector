@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         ChatGPT GPT 4o + Temp Chat Automation
 // @namespace    http://tampermonkey.net/
+// @version      1.4
+// @description  Temp Chat first, GPT-4o second, Ctrl+Space toggle — skips if model=gpt-5 is in URL, or model=gpt-4o & temporary-chat=true already set, or on /c/<uuid> paths
 // @author       MHSEA
-// @version      1.1
-// @description  Temp Chat first, GPT-4o second, Ctrl+Space toggle — skips if model=gpt-5 is in URL or model=gpt-4o & temporary-chat=true already set
 // @icon         https://cdn.oaistatic.com/assets/favicon-180x180-od45eci6.webp
 // @match        https://chatgpt.com/*
 // @run-at       document-idle
@@ -13,8 +13,14 @@
 (function () {
   'use strict';
 
+  const pathIsConversation = /^\/c\/[a-f0-9-]{36}$/i.test(location.pathname);
+  if (pathIsConversation) {
+    console.log('[TM] Skipping script — conversation URL detected:', location.pathname);
+    return;
+  }
+
   const urlParams = new URLSearchParams(window.location.search);
-  const modelParam = urlParams.get('model')?.toLowerCase();
+  const modelParam = urlParams.get('model')?.toLowerCase() || '';
   const tempChatParam = urlParams.get('temporary-chat');
 
   if (modelParam === 'gpt-4o' && tempChatParam === 'true') {
@@ -118,24 +124,28 @@
     }
   });
 
-  // Startup sequence
+  // Initial load: Temp Chat + Model Selection
   (async () => {
     await Promise.all([
       waitFor(getTempChatButton),
       waitFor('button[data-testid="model-switcher-dropdown-button"]')
     ]);
-    await forceTempChatOn();
+    await forceTempChatOn();   // TEMP CHAT ONLY ONCE
     await enforceGPT4o();
     setTimeout(forceTempChatOn, 500);
   })();
 
-  // Watch for route changes
+  // On route change: GPT-4o only (not for conversation URLs)
   let lastPath = location.pathname;
   setInterval(() => {
-    if (location.pathname !== lastPath) {
-      lastPath = location.pathname;
-      forceTempChatOn();
-      enforceGPT4o();
+    const newPath = location.pathname;
+    if (newPath !== lastPath) {
+      lastPath = newPath;
+      if (!/^\/c\/[a-f0-9-]{36}$/i.test(newPath)) {
+        enforceGPT4o();
+      } else {
+        console.log('[TM] Route change to conversation — skipping automation');
+      }
     }
   }, 1000);
 })();
