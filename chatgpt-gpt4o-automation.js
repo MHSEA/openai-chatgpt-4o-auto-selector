@@ -2,8 +2,8 @@
 // @name         ChatGPT GPT 4o + Temp Chat Automation
 // @namespace    http://tampermonkey.net/
 // @author       MHSEA
-// @version      1.0
-// @description  Temp Chat first, GPT-4o second, Ctrl+Space toggle — skips if URL already contains ?model=gpt-4o&temporary-chat=true
+// @version      1.1
+// @description  Temp Chat first, GPT-4o second, Ctrl+Space toggle — skips if model=gpt-5 is in URL or model=gpt-4o & temporary-chat=true already set
 // @icon         https://cdn.oaistatic.com/assets/favicon-180x180-od45eci6.webp
 // @match        https://chatgpt.com/*
 // @run-at       document-idle
@@ -13,14 +13,18 @@
 (function () {
   'use strict';
 
-  // Skip if already correct params
   const urlParams = new URLSearchParams(window.location.search);
-  if (
-    urlParams.get('model') === 'gpt-4o' &&
-    urlParams.get('temporary-chat') === 'true'
-  ) {
-    console.log('[TM] Skipping script — model=gpt-4o & temporary-chat=true already set ✅');
+  const modelParam = urlParams.get('model')?.toLowerCase();
+  const tempChatParam = urlParams.get('temporary-chat');
+
+  if (modelParam === 'gpt-4o' && tempChatParam === 'true') {
+    console.log('[TM] Skipping script — already using GPT-4o + Temporary Chat ✅');
     return;
+  }
+
+  const skipModelSwitch = modelParam === 'gpt-5';
+  if (skipModelSwitch) {
+    console.log('[TM] Skipping GPT-4o switch — GPT-5 explicitly requested via URL.');
   }
 
   const q = (s, r = document) => r.querySelector(s);
@@ -32,7 +36,7 @@
     while (Date.now() - start < timeout) {
       const el = typeof selOrFn === 'string' ? q(selOrFn) : selOrFn();
       if (el) return el;
-      await sleep(15); // fast polling
+      await sleep(15);
     }
     return null;
   };
@@ -97,6 +101,8 @@
   }
 
   async function enforceGPT4o() {
+    if (skipModelSwitch) return;
+
     for (let i = 0; i < 2; i++) {
       if (await selectGPT4o()) break;
       await sleep(50);
@@ -120,7 +126,7 @@
     ]);
     await forceTempChatOn();
     await enforceGPT4o();
-    setTimeout(forceTempChatOn, 500); // retry safety
+    setTimeout(forceTempChatOn, 500);
   })();
 
   // Watch for route changes
