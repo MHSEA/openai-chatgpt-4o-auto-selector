@@ -21,6 +21,10 @@ A fast and lightweight Tampermonkey userscript that:
 
 ---
 
+![2025-08-12_01-54-37-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/0a8d0653-2c5f-4500-b60e-1a71c34dea98)
+
+---
+
 📝 Important Notes
 If you're not seeing GPT-4o in the model selector:
   1- Go to chatgpt.com on a PC or browser
