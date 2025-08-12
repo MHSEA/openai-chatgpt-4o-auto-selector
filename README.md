@@ -1,4 +1,4 @@
-# 🔄 ChatGPT GPT 4o + Temp Chat Automation
+# 🔄 ChatGPT GPT 4o + Temporary Chat Automation
 
 A fast and lightweight Tampermonkey userscript that:
 
