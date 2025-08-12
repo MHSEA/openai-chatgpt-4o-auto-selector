@@ -65,8 +65,8 @@ If you're accessing ChatGPT via a URL like: https://chatgpt.com/?model=gpt-4o&te
 
 Please note: OpenAI has disabled the ability to select models through direct URL parameters. As a result, this script ensures that:
 
-✅ GPT-4o is automatically selected via the UI
-✅ Temporary Chat is toggled through interface interaction
+- ✅ GPT-4o is automatically selected via the UI
+- ✅ Temporary Chat is toggled through interface interaction
 
 Additionally, if this exact URL is detected, the script will not run to avoid redundant actions and unnecessary processing.
 
